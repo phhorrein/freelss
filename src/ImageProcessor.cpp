@@ -126,6 +126,11 @@ int ImageProcessor::process(Image& before, Image& after, Image * debuggingImage,
 	unsigned char * b = after.getPixels();
 	unsigned char * d = NULL;
 
+	std::cout << "Writing Jpegs" << std::endl;
+	Image::writeJpeg(before, "/tmp/base.jpg");
+	Image::writeJpeg(after, "/tmp/laser.jpg");
+
+
 	std::fstream rowOut;
 
 	const bool writeDebugImage = debuggingImage != NULL;

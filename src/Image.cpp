@@ -182,6 +182,7 @@ void Image::writeJpeg(Image& image, const std::string& filename)
 	}
 	catch (...)
 	{
+		std::cout << "Exception when converting Jpeg" << std::endl;
 		fout.close();
 		free(imageData);
 		throw;

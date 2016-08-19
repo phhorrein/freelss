@@ -43,6 +43,7 @@ OpenCVCamera::OpenCVCamera(int devid) :
 		std::cout << "Target Image Height: " << m_imageHeight << std::endl;
 
 		std::cout << "Initialized camera" << std::endl;
+		m_camera >> m_matImage;
 	}
 	catch (...) {
 		throw;
@@ -63,9 +64,11 @@ Image * OpenCVCamera::acquireImage()
 
 	// Grab the image
 	Image * image = new Image(m_imageWidth, m_imageHeight, 3);
+	unsigned char* pixels = image->getPixels();
 	m_camera >> m_matImage; 
 	cvtColor(m_matImage, m_matImage, COLOR_BGR2RGB);
-	image->assignPixels(m_matImage.data);
+//	image->assignPixels(m_matImage.data);
+	memcpy(pixels, m_matImage.data, image->getPixelBufferSize());
 
 	return image;
 }

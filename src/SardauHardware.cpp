@@ -34,8 +34,8 @@ namespace freelss
 SardauHardware *SardauHardware::m_instance = NULL;
 
 SardauHardware::SardauHardware() :
-	m_portname("/dev/ttyACM0"),
-	m_port("/dev/ttyACM0",38400)
+	m_portname("/dev/ttyUSB0"),
+	m_port("/dev/ttyUSB0",38400)
 {
 	Setup * setup = Setup::get();
 	m_responseDelay = setup->motorResponseDelay;
@@ -86,6 +86,7 @@ string SardauHardware::sendCommand(string command, int timeout)
 	try
 	{
 		try {
+			cout << "Getting dump data" << endl;
 			m_port.setTimeout(posix_time::milliseconds(500));
 			while (1)
 				m_port.read(dump,256);
@@ -120,13 +121,13 @@ void SardauHardware::step()
 {
 	sendCommand("T R 001\r\n",300);
 	//digitalWrite(m_stepPin, LOW);
-	Thread::usleep(m_responseDelay);
-
-	//digitalWrite(m_stepPin, HIGH);
-	Thread::usleep(m_responseDelay);
-
-	// Wait the step delay (this is how speed is controlled)
-	Thread::usleep(m_stepDelay);
+//	Thread::usleep(m_responseDelay);
+//
+//	//digitalWrite(m_stepPin, HIGH);
+//	Thread::usleep(m_responseDelay);
+//
+//	// Wait the step delay (this is how speed is controlled)
+//	Thread::usleep(m_stepDelay);
 }
 
 int SardauHardware::rotate(real theta)
@@ -159,14 +160,14 @@ void SardauHardware::turnOn(Laser::LaserSide laser)
 	if (laser == Laser::RIGHT_LASER || laser == Laser::ALL_LASERS)
 	{
 //		digitalWrite (m_rightLaserPin, m_laserOnValue);
-		sendCommand("L 0 1\r\n",500);
+		sendCommand("L 3 1\r\n",500);
 		m_rightLaserOn = true;
 	}
 
 	if (laser == Laser::LEFT_LASER || laser == Laser::ALL_LASERS)
 	{
 //		digitalWrite (m_leftLaserPin, m_laserOnValue);
-		sendCommand("L 3 1\r\n",500);
+		sendCommand("L 0 1\r\n",500);
 		m_leftLaserOn = true;
 	}
 }
@@ -176,14 +177,14 @@ void SardauHardware::turnOff(Laser::LaserSide laser)
 	if (laser == Laser::RIGHT_LASER || laser == Laser::ALL_LASERS)
 	{
 //		digitalWrite (m_rightLaserPin, m_laserOffValue);
-		sendCommand("L 0 0\r\n",500);
+		sendCommand("L 3 0\r\n",500);
 		m_rightLaserOn = false;
 	}
 
 	if (laser == Laser::LEFT_LASER || laser == Laser::ALL_LASERS)
 	{
 //		digitalWrite (m_leftLaserPin, m_laserOffValue);
-		sendCommand("L 3 0\r\n",500);
+		sendCommand("L 0 0\r\n",500);
 		m_leftLaserOn = false;
 	}
 }
