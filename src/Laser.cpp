@@ -20,7 +20,7 @@
 
 #include "Main.h"
 #include "Laser.h"
-#include "RelayLaser.h"
+#include "SardauHardware.h"
 
 namespace freelss
 {
@@ -41,7 +41,7 @@ Laser * Laser::getInstance()
 {
 	if (m_instance == NULL)
 	{
-		m_instance = new RelayLaser();
+		m_instance = SardauHardware::getInstance();
 	}
 
 	return m_instance;

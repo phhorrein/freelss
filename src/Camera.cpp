@@ -19,9 +19,8 @@
 */
 
 #include "Main.h"
+#include "OpenCVCamera.h"
 #include "Camera.h"
-#include "MmalStillCamera.h"
-#include "MmalVideoCamera.h"
 #include "MockCamera.h"
 #include "PresetManager.h"
 #include "Thread.h"
@@ -31,7 +30,7 @@ namespace freelss
 
 CriticalSection Camera::m_cs;
 Camera * Camera::m_instance = NULL;
-Camera::CameraType Camera::m_cameraType = Camera::CT_MMALVIDEO;
+Camera::CameraType Camera::m_cameraType = Camera::CT_OPENCV;
 int Camera::m_reqImageWidth = 0;
 int Camera::m_reqImageHeight = 0;
 int Camera::m_reqFrameRate = 0;
@@ -64,12 +63,17 @@ Camera * Camera::getInstance()
 			{
 				Preset& preset = PresetManager::get()->getActivePreset();
 				std::cout << "Creating still mode camera resolution=" << m_reqImageWidth << "x" << m_reqImageHeight << std::endl;
-				m_instance = new MmalStillCamera(m_reqImageWidth, m_reqImageHeight, preset.enableBurstModeForStillImages);
+				//m_instance = new MmalStillCamera(m_reqImageWidth, m_reqImageHeight, preset.enableBurstModeForStillImages);
 			}
 			else if (m_cameraType == Camera::CT_MMALVIDEO)
 			{
 				std::cout << "Creating MMAL video mode camera resolution=" << m_reqImageWidth << "x" << m_reqImageHeight << std::endl;
-				m_instance = new MmalVideoCamera(m_reqImageWidth, m_reqImageHeight, m_reqFrameRate);
+				//m_instance = new MmalVideoCamera(m_reqImageWidth, m_reqImageHeight, m_reqFrameRate);
+			}
+			else if (m_cameraType == Camera::CT_OPENCV) 
+			{
+				m_instance = new OpenCVCamera(0);
+				std::cout << "Creating OpenCV video mode camera resolution=" << m_instance->getImageWidth() << "x" << m_instance->getImageHeight() << std::endl;
 			}
 			else
 			{
@@ -80,7 +84,7 @@ Camera * Camera::getInstance()
 	catch (...)
 	{
 		// Initialize the mock camera if there was a problem
-		m_instance = new MockCamera(m_reqImageWidth, m_reqImageHeight);
+//		m_instance = new MockCamera(m_reqImageWidth, m_reqImageHeight);
 		m_cs.leave();
 	}
 	m_cs.leave();
@@ -116,35 +120,55 @@ void Camera::reinitialize()
 	switch (cameraMode)
 	{
 	case CM_STILL_5MP:
+#if 0
 		type = CT_MMALSTILL;
+#else
+		type = CT_OPENCV;
+#endif
 		reqImageWidth = 2592;
 		reqImageHeight = 1944;
 		reqFrameRate = 15;
 		break;
 
 	case CM_VIDEO_5MP:
+#if 0
 		type = CT_MMALVIDEO;
+#else
+		type = CT_OPENCV;
+#endif
 		reqImageWidth = 2592;
 		reqImageHeight = 1944;
 		reqFrameRate = 15;
 		break;
 
 	case CM_VIDEO_HD:
+#if 0
 		type = CT_MMALVIDEO;
+#else
+		type = CT_OPENCV;
+#endif
 		reqImageWidth = 1600;
 		reqImageHeight = 1200;
 		reqFrameRate = 15;
 		break;
 
 	case CM_VIDEO_1P2MP:
+#if 0
 		type = CT_MMALVIDEO;
+#else
+		type = CT_OPENCV;
+#endif
 		reqImageWidth = 1280;
 		reqImageHeight = 960;
 		reqFrameRate = 15;
 		break;
 
 	case CM_VIDEO_VGA:
+#if 0
 		type = CT_MMALVIDEO;
+#else
+		type = CT_OPENCV;
+#endif
 		reqImageWidth = 640;
 		reqImageHeight = 480;
 		reqFrameRate = 15;

@@ -19,6 +19,7 @@
 */
 
 #include "Main.h"
+#include "SardauHardware.h"
 #include "Camera.h"
 #include "Scanner.h"
 #include "A4988TurnTable.h"
@@ -33,6 +34,8 @@
 #include "WifiConfig.h"
 #include <curl/curl.h>
 #include <algorithm>
+
+freelss::SardauHardware *m_hardware = NULL;
 
 static bool SortRecordByRow(const freelss::DataPoint& a, const freelss::DataPoint& b)
 {
@@ -72,11 +75,11 @@ struct InitSingletons
 	InitSingletons()
 	{
 		freelss::PresetManager::get();
-		freelss::A4988TurnTable::initialize();
-		freelss::RelayLaser::initialize();
 		freelss::UpdateManager::get();
 		freelss::Setup::get();
+#ifdef LIGHTING_IMPLEMENTED
 		freelss::Lighting::get();
+#endif
 		freelss::WifiConfig::get();
 		freelss::HttpServer::get();
 	}
@@ -89,25 +92,27 @@ struct InitSingletons
 		freelss::TurnTable::release();
 		freelss::UpdateManager::release();
 		freelss::PresetManager::release();
+#ifdef LIGHTING_IMPLEMENTED
 		freelss::Lighting::release();
+#endif
 		freelss::WifiConfig::release();
 		freelss::Setup::release();
 	}
 };
 
 /** Initializes and destroys the Raspberry Pi subsystem */
-struct InitBcmHost
-{
-	InitBcmHost()
-	{
-		bcm_host_init();
-	}
-
-	~InitBcmHost()
-	{
-		bcm_host_deinit();
-	}
-};
+//struct InitBcmHost
+//{
+//	InitBcmHost()
+//	{
+//		bcm_host_init();
+//	}
+//
+//	~InitBcmHost()
+//	{
+//		bcm_host_deinit();
+//	}
+//};
 
 int main(int argc, char **argv)
 {
@@ -125,12 +130,12 @@ int main(int argc, char **argv)
 	}
 
 	// Initialize the Raspberry Pi hardware
-	InitBcmHost bcmHost;
+	//InitBcmHost bcmHost;
 
 	try
 	{
 		// Setup wiring pi
-		wiringPiSetup();
+//		wiringPiSetup();
 
 		// Initialize Curl
 		InitCurl curl();
@@ -173,8 +178,8 @@ int main(int argc, char **argv)
 namespace freelss
 {
 
-const std::string SCAN_OUTPUT_DIR = "/scans";
-const std::string DEBUG_OUTPUT_DIR = "/debug";
+const std::string SCAN_OUTPUT_DIR = "/tmp/scans";
+const std::string DEBUG_OUTPUT_DIR = "/tmp/debug";
 const std::string PROPERTIES_FILE = GetPropertiesFile();
 
 time_t ScanResult::getScanDate() const

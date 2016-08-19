@@ -34,8 +34,8 @@ namespace freelss
 SardauHardware *SardauHardware::m_instance = NULL;
 
 SardauHardware::SardauHardware() :
-	m_portname("/dev/ttyUSB0"),
-	m_port("/dev/ttyUSB0",38400)
+	m_portname("/dev/ttyACM0"),
+	m_port("/dev/ttyACM0",38400)
 {
 	Setup * setup = Setup::get();
 	m_responseDelay = setup->motorResponseDelay;

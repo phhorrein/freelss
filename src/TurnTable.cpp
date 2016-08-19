@@ -20,7 +20,7 @@
 
 #include "Main.h"
 #include "TurnTable.h"
-#include "A4988TurnTable.h"
+#include "SardauHardware.h"
 
 namespace freelss
 {
@@ -41,7 +41,7 @@ TurnTable * TurnTable::getInstance()
 {
 	if (TurnTable::m_instance == NULL)
 	{
-		TurnTable::m_instance = new A4988TurnTable();
+		TurnTable::m_instance = SardauHardware::getInstance();
 	}
 
 	return TurnTable::m_instance;

@@ -1147,7 +1147,11 @@ static int ProcessPageRequest(RequestInfo * reqInfo)
 			else if (reqInfo->method == RequestInfo::POST && cmd == "setLightIntensity")
 			{
 				std::string intensityStr = reqInfo->arguments["intensity"];
+#ifdef LIGHTING_IMPLEMENTED
 				Lighting::get()->setIntensity(ToInt(intensityStr));
+#else 
+				std::cout << "Lighting not implemented!" << std::endl;
+#endif
 				message = "Set light intensity to " + intensityStr + ".";
 			}
 

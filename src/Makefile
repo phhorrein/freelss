@@ -1,23 +1,23 @@
 VERSION=freelss-1-11
 CC=g++
-CFLAGS=-O3 -Wall -Winvalid-pch -fexceptions -I/usr/local/include -I/opt/vc/include \
+CFLAGS=-g -O3 -Wall -Winvalid-pch -fexceptions -I/usr/local/include -I/opt/vc/include \
 	-I/opt/vc/include/interface/vcos/pthreads \
 	-I/opt/vc/include/interface/vmcs_host/linux \
 	-I/opt/vc/include/interface\
-	-I/opt/vc/include/interface/mmal/util\
 	-I../contrib
 
-LFLAGS=-liw -lcurl -lmmal -lmmal_core -lmmal_util -lvcos -lpthread -lpng -ljpeg -lsqlite3 -lwiringPi -lmicrohttpd -lssl -lcrypto  -lbcm_host -L/usr/local/lib -L/opt/vc/lib
+LFLAGS=-liw -lcurl -lpthread -lpng -ljpeg -lsqlite3 -lmicrohttpd -lssl -lcrypto -lboost_system -L/usr/local/lib -L/opt/vc/lib
+LFLAGS+= `pkg-config --libs opencv`
 OBJECTS=WebContent.o PropertyReaderWriter.o Main.o \
 	HttpServer.o CriticalSection.o Scanner.o Image.o ImageProcessor.o \
-	Thread.o A4988TurnTable.o RelayLaser.o LocationMapper.o \
+	Thread.o LocationMapper.o \
 	PlyWriter.o Calibrator.o \
-	Camera.o MmalStillCamera.o \
-	MmalVideoCamera.o PixelLocationWriter.o StlWriter.o TurnTable.o \
+	Camera.o OpenCVCamera.o \
+	PixelLocationWriter.o StlWriter.o TurnTable.o \
 	Laser.o Preset.o PresetManager.o Setup.o LaserResultsMerger.o\
+	TimeoutSerial.o SardauHardware.o \
 	XyzWriter.o UpdateManager.o Progress.o FileWriter.o MemWriter.o \
-	Facetizer.o MmalImageStore.o Lighting.o ObjectBaseCreator.o WifiConfig.o \
-	MockCamera.o
+	Facetizer.o ObjectBaseCreator.o WifiConfig.o
 
 all: freelss 
 
@@ -54,8 +54,8 @@ MmalStillCamera.o: MmalStillCamera.cpp MmalStillCamera.h Main.h
 MmalVideoCamera.o: MmalVideoCamera.cpp MmalVideoCamera.h Main.h
 	$(CC) -c $(CFLAGS) MmalVideoCamera.cpp
 
-A4988TurnTable.o: A4988TurnTable.cpp A4988TurnTable.h TurnTable.h Main.h
-	$(CC) -c $(CFLAGS) A4988TurnTable.cpp
+#A4988TurnTable.o: A4988TurnTable.cpp A4988TurnTable.h TurnTable.h Main.h
+#	$(CC) -c $(CFLAGS) A4988TurnTable.cpp
 
 RelayLaser.o: RelayLaser.cpp RelayLaser.h Laser.h Main.h
 	$(CC) -c $(CFLAGS) RelayLaser.cpp
@@ -131,6 +131,15 @@ ObjectBaseCreator.o: ObjectBaseCreator.cpp ObjectBaseCreator.h Main.h
 
 WifiConfig.o: WifiConfig.cpp WifiConfig.h Main.h
 	$(CC) -c $(CFLAGS) WifiConfig.cpp
+
+OpenCVCamera.o: OpenCVCamera.cpp OpenCVCamera.h 
+	$(CC) -c $(CFLAGS) OpenCVCamera.cpp
+
+SardauHardware.o: SardauHardware.cpp SardauHardware.h 
+	$(CC) -c $(CFLAGS) SardauHardware.cpp
+
+TimeoutSerial.o: TimeoutSerial.cpp TimeoutSerial.h 
+	$(CC) -c $(CFLAGS) TimeoutSerial.cpp
 
 MockCamera.o: MockCamera.cpp MockCamera.h Main.h
 	$(CC) -c $(CFLAGS) MockCamera.cpp

@@ -31,6 +31,7 @@ The origin is the center of the turn table.
 
 // MMAL/BCM
 // This mmal is from the RaspiCam package and was copied to /usr/local/include
+#ifdef RASPBERRY_PI
 #include <bcm_host.h>
 #include <interface/vcos/vcos.h>
 #include <mmal/mmal.h>
@@ -39,6 +40,7 @@ The origin is the center of the turn table.
 #include <mmal_util_params.h>
 #include <mmal_default_components.h>
 #include <mmal_connection.h>
+#endif
 
 // MICROHTTPD
 #include <microhttpd.h>
@@ -317,6 +319,8 @@ struct sqlite3_stmt;
 
 
 // Include wiringPi
+#ifdef RASPBERRY_PI
 #include <wiringPi.h>
+#endif
 
 

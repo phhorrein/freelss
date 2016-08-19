@@ -580,6 +580,7 @@ std::string WebContent::cal1(const std::string& inMessage)
         <div class=\"calDescr\">Line the front wall of the calibration item over the center of the turntable hole and click this button to calibrate the lasers.</div>\
     </div>";
 
+#ifdef LIGHTING_IMPLEMENTED
 	if (setup->enableLighting)
 	{
 		sstr << "\
@@ -592,6 +593,9 @@ std::string WebContent::cal1(const std::string& inMessage)
 		</div>\
 		<div class=\"calDescr\">Sets the lighting intensity - 0 (off) to 100 (full).</div>";
 	}
+#else
+	sstr << "<div>Lighting is not implemented!</div>";
+#endif
 
 	sstr << "\
 	<form action=\"/cal1\" method=\"POST\" enctype=\"application/x-www-form-urlencoded\"><input name=\"cmd\" value=\"toggleLeftLaser\" type=\"hidden\"><input class=\"controlSubmit\" value=\"Toggle Left Laser\" type=\"submit\"></form>\

@@ -31,7 +31,7 @@ class Camera
 public:
 
 	/** The type of camera instance to create */
-	enum CameraType { CT_RASPICAM, CT_MMALSTILL, CT_MMALVIDEO, CT_RASPISTILL};
+	enum CameraType { CT_RASPICAM, CT_MMALSTILL, CT_MMALVIDEO, CT_RASPISTILL, CT_OPENCV};
 
 	/** The camera mode */
 	enum CameraMode { CM_STILL_5MP, CM_VIDEO_5MP, CM_VIDEO_HD, CM_VIDEO_1P2MP, CM_VIDEO_VGA};
