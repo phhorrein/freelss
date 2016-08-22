@@ -1,6 +1,6 @@
 VERSION=freelss-1-11
 CC=g++
-CFLAGS=-g -O3 -Wall -Winvalid-pch -fexceptions -I/usr/local/include -I/opt/vc/include \
+CFLAGS=-g -O3 -std=c++11 -Wall -Winvalid-pch -fexceptions -I/usr/local/include -I/opt/vc/include \
 	-I/opt/vc/include/interface/vcos/pthreads \
 	-I/opt/vc/include/interface/vmcs_host/linux \
 	-I/opt/vc/include/interface\

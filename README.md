@@ -28,7 +28,7 @@ $ sudo apt-get upgrade
 
 Install the dependencies that are managed by the package manager.
 ```
-$ sudo apt-get install libpng-dev libjpeg-dev cmake vlc git-core gcc build-essential unzip sqlite3 libsqlite3-dev libmicrohttpd-dev libcurl4-openssl-dev libiw-dev libssl-dev
+$ sudo apt-get install libpng-dev libjpeg-dev cmake vlc git-core gcc build-essential unzip sqlite3 libsqlite3-dev libmicrohttpd-dev libcurl4-openssl-dev libiw-dev libssl-dev libopencv-dev libboost-system1.61-dev
 ```
 
 Download and build FreeLSS

@@ -64,6 +64,7 @@ private:
 	int m_imageWidth;
 	int m_imageHeight;
 	int m_frameRate;
+	int m_devid;
 	VideoCapture m_camera;
 	Mat m_matImage;
 };

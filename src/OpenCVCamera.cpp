@@ -18,16 +18,23 @@
  ****************************************************************************
 */
 
+#include <chrono>
 #include "Main.h"
 #include "OpenCVCamera.h"
 #include "Thread.h"
 #include "opencv2/opencv.hpp"
 
+using Clock = std::chrono::steady_clock;
+using std::chrono::time_point;
+using std::chrono::duration_cast;
+using std::chrono::milliseconds;
+using namespace std::chrono;
 using namespace cv;
 namespace freelss
 {
 
 OpenCVCamera::OpenCVCamera(int devid) :
+	m_devid(devid),
 	m_camera(devid)
 {
 	try {
@@ -43,7 +50,6 @@ OpenCVCamera::OpenCVCamera(int devid) :
 		std::cout << "Target Image Height: " << m_imageHeight << std::endl;
 
 		std::cout << "Initialized camera" << std::endl;
-		m_camera >> m_matImage;
 	}
 	catch (...) {
 		throw;
@@ -57,15 +63,20 @@ OpenCVCamera::~OpenCVCamera()
 
 Image * OpenCVCamera::acquireImage()
 {
+	int delay = 0;
 	// Wait for the camera to be ready
 	handleAcquisitionDelay();
-
-	// Enable the encoder output port
 
 	// Grab the image
 	Image * image = new Image(m_imageWidth, m_imageHeight, 3);
 	unsigned char* pixels = image->getPixels();
-	m_camera >> m_matImage; 
+	while (delay < 10) {
+		time_point<Clock> start = Clock::now();
+		m_camera >> m_matImage; 
+		time_point<Clock> end = Clock::now();
+		milliseconds diff = duration_cast<milliseconds>(end - start);
+		delay = diff.count();
+	}
 	cvtColor(m_matImage, m_matImage, COLOR_BGR2RGB);
 //	image->assignPixels(m_matImage.data);
 	memcpy(pixels, m_matImage.data, image->getPixelBufferSize());
@@ -75,6 +86,7 @@ Image * OpenCVCamera::acquireImage()
 
 void OpenCVCamera::releaseImage(Image * image)
 {
+	delete image;
 }
 
 int OpenCVCamera::getImageHeight() const

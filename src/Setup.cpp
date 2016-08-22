@@ -55,7 +55,7 @@ Setup::Setup() :
 	stepsPerRevolution(3200),
 	motorResponseDelay(2),
 	motorStepDelay(5000),
-	httpPort(80),
+	httpPort(2980),
 	serialNumber(""),
 	unitOfLength(UL_INCHES),
 	haveLaserPlaneNormals(false),
