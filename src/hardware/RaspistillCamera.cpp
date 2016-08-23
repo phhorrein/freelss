@@ -18,9 +18,11 @@
  ****************************************************************************
 */
 
+#include "Config.h"
+
+#if FREELSS_RAPSBERRYPI
 #include "Main.h"
 #include "RaspistillCamera.h"
-
 namespace freelss
 {
 
@@ -271,3 +273,4 @@ real RaspistillCamera::getFocalLength() const
 }
 
 }
+#endif
