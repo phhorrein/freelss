@@ -18,7 +18,7 @@
  ****************************************************************************
 */
 
-#include "Main.h"
+#include "Utils.h"
 #include "Scanner.h"
 #include "PresetManager.h"
 #include "Setup.h"

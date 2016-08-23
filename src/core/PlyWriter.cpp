@@ -18,7 +18,7 @@
  ****************************************************************************
 */
 
-#include "Main.h"
+#include "Utils.h"
 #include "PlyWriter.h"
 #include "Preset.h"
 #include "IWriter.h"

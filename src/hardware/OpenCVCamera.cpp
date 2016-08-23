@@ -19,7 +19,7 @@
 */
 
 #include <chrono>
-#include "Main.h"
+#include "Utils.h"
 #include "OpenCVCamera.h"
 #include "Thread.h"
 #include "opencv2/opencv.hpp"

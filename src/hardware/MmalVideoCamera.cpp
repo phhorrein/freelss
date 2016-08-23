@@ -21,7 +21,7 @@
 #include "Config.h"
 
 #if FREELSS_RASPBERRYPI
-#include "Main.h"
+#include "Utils.h"
 #include "MmalVideoCamera.h"
 #include "Thread.h"
 #include "MmalImageStore.h"

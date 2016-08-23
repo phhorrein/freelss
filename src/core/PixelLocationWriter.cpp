@@ -18,7 +18,7 @@
  ****************************************************************************
 */
 
-#include "Main.h"
+#include "Utils.h"
 #include "PixelLocationWriter.h"
 #include "Image.h"
 

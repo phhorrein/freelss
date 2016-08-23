@@ -44,12 +44,14 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}
 	${CURL_INCLUDE_DIRS}
 	${Boost_INCLUDE_DIRS}
 	${MHD_INCLUDE_DIRS}
+	${VTK_INCLUDE_DIRS}
 	gui core webapp hardware contrib)
 
 file(GLOB UI_FILES gui/*.ui)
 file(GLOB QT_WRAP geninc/*.h)
 file(GLOB CXX_CORE_FILES core/*.cpp hardware/*.cpp ) 
 file(GLOB CXX_WEBAPP_FILES webapp/*.cpp)
+file(GLOB CXX_GUI_FILES gui/*.cpp)
 set(CMAKE_BUILD_TYPE Debug)
 
 # CMAKE_AUTOMOC in ON so the MocHdrs will be automatically wrapped.
@@ -66,16 +68,18 @@ target_link_libraries(FreeLSS-webapp
 	${MHD_LIBRARIES}
 	${LIBIW_LIBRARIES}
 	${OPENSSL_LIBRARIES})
-#qt5_wrap_ui(UISrcs ${UI_FILES} )
-#qt5_use_modules(FreeLSS-NG Core Gui)
 
-#target_link_libraries(FreeLSS-NG
-#	${VTK_LIBRARIES}
-#	${CMAKE_THREAD_LIBS_INIT}
-#	${Boost_LIBRARIES}
-#	${OpenCV_LIBRARIES}
-#	${CURL_LIBRARIES}
-#	${MHD_LIBRARIES}
-#	${LIBIW_LIBRARIES}
-#	${OPENSSL_LIBRARIES})
+qt5_wrap_ui(UISrcs ${UI_FILES} )
+add_executable(QFreeLSS
+	${CXX_CORE_FILES} ${CXX_GUI_FILES} ${UISrcs})
+target_link_libraries(QFreeLSS
+	${VTK_LIBRARIES}
+	${CMAKE_THREAD_LIBS_INIT}
+	${Boost_LIBRARIES}
+	${OpenCV_LIBRARIES}
+	${CURL_LIBRARIES}
+	${MHD_LIBRARIES}
+	${LIBIW_LIBRARIES}
+	${OPENSSL_LIBRARIES})
+qt5_use_modules(QFreeLSS Core Gui)
 #target_link_libraries(FreeLSS-NG vtkHybrid QVTK vtkViews ${QtSerialPort_LIBRARIES} ${QT_LIBRARIES})

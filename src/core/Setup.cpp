@@ -17,7 +17,7 @@
  *   along with FreeLSS.  If not, see <http://www.gnu.org/licenses/>.       *
  ****************************************************************************
 */
-#include "Main.h"
+#include "Utils.h"
 #include "Setup.h"
 
 namespace freelss

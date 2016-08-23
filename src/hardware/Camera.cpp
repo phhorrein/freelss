@@ -18,7 +18,7 @@
  ****************************************************************************
 */
 
-#include "Main.h"
+#include "Utils.h"
 #include "OpenCVCamera.h"
 #include "Camera.h"
 #include "MockCamera.h"

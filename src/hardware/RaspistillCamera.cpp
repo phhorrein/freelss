@@ -21,7 +21,7 @@
 #include "Config.h"
 
 #if FREELSS_RAPSBERRYPI
-#include "Main.h"
+#include "Utils.h"
 #include "RaspistillCamera.h"
 namespace freelss
 {
