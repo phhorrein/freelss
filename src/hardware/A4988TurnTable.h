@@ -20,32 +20,58 @@
 
 #pragma once
 
+#include "TurnTable.h"
+#include "Config.h"
 
+#if FREELSS_RASPERRYPI
 namespace freelss
 {
 
 /**
- * Singleton class for controlling the lighting system
+ * An implementation of the TurnTable class that works
+ * with the A4988 motor driver.
  */
-class Lighting
+class A4988TurnTable : public TurnTable
 {
 public:
-	/** Returns the singleton instance */
-	static Lighting * get();
+	A4988TurnTable();
+	~A4988TurnTable();
 
-	/** Releases the singleton instance */
-	static void release();
+	/** Rotates this amount in radians */
+	int rotate(real theta);
 
-	Lighting();
+	/** Enable/Disable the stepper motor */
+	void setMotorEnabled(bool enabled);
 
-	/** 0 (off) to 100 (full intensity) */
-	void setIntensity(int intensity);
+	/** Initialize the turn table */
+	static void initialize();
 
-	int getIntensity() const;
 private:
-	static Lighting * m_instance;
-	int m_pin;
-	int m_intensity;
+
+	/** Move to the next step */
+	void step();
+
+	/** The time to sleep between steps in microseconds */
+	int m_stepDelay;
+
+	/** The time for the stepper driver to detect a voltage transition */
+	int m_responseDelay;
+
+	/** The enable pin */
+	int m_enablePin;
+
+	/** The step pin */
+	int m_stepPin;
+
+	/** The direction pin */
+	int m_directionPin;
+
+	/** The number of steps per revolution */
+	int m_stepsPerRevolution;
+
+	/** The time to sleep between steps in microseconds */
+	int m_stabilityDelay;
 };
 
 }
+#endif

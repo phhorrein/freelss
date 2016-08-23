@@ -18,6 +18,9 @@
  ****************************************************************************
 */
 
+#include "Config.h"
+
+#if FREELSS_RASPBERRYPI
 #include "Main.h"
 #include "MmalVideoCamera.h"
 #include "Thread.h"
@@ -481,3 +484,4 @@ real MmalVideoCamera::getFocalLength() const
 	return 3.6;
 }
 } // end ns scanner
+#endif

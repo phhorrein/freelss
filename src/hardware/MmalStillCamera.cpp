@@ -18,6 +18,9 @@
  ****************************************************************************
 */
 
+#include "Config.h"
+
+#if FREELSS_RASPBERRYPI
 #include "Main.h"
 #include "MmalStillCamera.h"
 #include "MmalImageStore.h"
@@ -530,3 +533,4 @@ real MmalStillCamera::getFocalLength() const
 }
 
 } // end ns scanner
+#endif

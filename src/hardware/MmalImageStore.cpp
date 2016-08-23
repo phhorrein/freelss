@@ -18,6 +18,9 @@
  ****************************************************************************
 */
 #include "Main.h"
+#include "Config.h"
+
+#if FREELSS_RASPBERRYPI
 #include "MmalImageStore.h"
 
 namespace freelss
@@ -113,3 +116,4 @@ void MmalImageStore::release(MmalImageStoreItem * item)
 }
 
 }
+#endif

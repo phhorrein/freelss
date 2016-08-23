@@ -24,6 +24,7 @@
 #include "Setup.h"
 #include "PresetManager.h"
 
+#if FREELSS_RASPBERRYPI
 namespace freelss
 {
 
@@ -106,3 +107,4 @@ void A4988TurnTable::setMotorEnabled(bool enabled)
 }
 
 }
+#endif

@@ -20,7 +20,10 @@
 
 #pragma once
 
+#include "Config.h"
 #include "Laser.h"
+
+#if FREELSS_RASPBERRYPI
 
 namespace freelss
 {
@@ -46,3 +49,5 @@ private:
 };
 
 }
+
+#endif

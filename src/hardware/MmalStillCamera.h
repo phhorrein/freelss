@@ -19,6 +19,9 @@
 */
 
 #pragma once
+#include "Config.h"
+
+#if FREELSS_RASPBERRYPI
 #include "Image.h"
 #include "CriticalSection.h"
 #include "Camera.h"
@@ -84,3 +87,4 @@ private:
 
 
 }
+#endif

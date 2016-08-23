@@ -1,6 +1,6 @@
 /*
  ****************************************************************************
- *  Copyright (c) 2015 Uriah Liggett <freelaserscanner@gmail.com>           *
+ *  Copyright (c) 2014 Uriah Liggett <freelaserscanner@gmail.com>           *
  *	This file is part of FreeLSS.                                           *
  *                                                                          *
  *  FreeLSS is free software: you can redistribute it and/or modify         *
@@ -17,46 +17,62 @@
  *   along with FreeLSS.  If not, see <http://www.gnu.org/licenses/>.       *
  ****************************************************************************
 */
-#pragma once
+#include "Config.h"
+#include "Main.h"
+#include "Lighting.h"
+#include "Setup.h"
 
-#include "Image.h"
+#if FREELSS_RASPBERRYPI
+#include <softPwm.h>
 
 namespace freelss
 {
+Lighting * Lighting::m_instance = NULL;
 
-/** Represents a single image in the store */
-struct MmalImageStoreItem
+Lighting * Lighting::get()
 {
-	MmalImageStoreItem(unsigned width, unsigned height, unsigned numComponents);
-	Image image;
-	bool available;
-	MMAL_BUFFER_HEADER_T * buffer;
-};
+	if (Lighting::m_instance == NULL)
+	{
+		Lighting::m_instance = new Lighting();
+	}
 
-/**
- * Manages the availability and memory of images for a Camera object.
- */
-class MmalImageStore
+	return Lighting::m_instance;
+}
+
+void Lighting::release()
 {
-public:
-	MmalImageStore(int numImages, unsigned width, unsigned height, unsigned numComponents);
-	~MmalImageStore();
+	delete Lighting::m_instance;
+	Lighting::m_instance = NULL;
+}
 
-	/** Returns the first available image and makes it unavailable */
-	MmalImageStoreItem * reserve();
+Lighting::Lighting() :
+	m_pin(-1),
+	m_intensity(0)
+{
+	Setup * setup = Setup::get();
+	m_pin = setup->lightingPin;
 
-	/** Returns the first available image for the given buffer and makes it unavailable */
-	MmalImageStoreItem * reserve(MMAL_BUFFER_HEADER_T * buffer);
+	if (setup->enableLighting)
+	{
+		softPwmCreate(m_pin, m_intensity, 100);
+	}
+}
 
-	/** Unlocks any releases any buffers associated with the image and makes it available  */
-	void release(Image * image);
 
-private:
+void Lighting::setIntensity(int intensity)
+{
+	if (intensity >= 0 && intensity <= 100)
+	{
+		softPwmWrite (m_pin, intensity);
+		m_intensity = intensity;
+	}
+}
 
-	/** Unlocks any releases any buffers associated with the item and makes it available  */
-	void release(MmalImageStoreItem * item);
-
-	std::vector<MmalImageStoreItem *> m_items;
-};
+int Lighting::getIntensity() const
+{
+	return m_intensity;
+}
 
 }
+
+#endif

@@ -18,10 +18,12 @@
  ****************************************************************************
 */
 
+#include "Config.h"
 #include "Main.h"
 #include "RelayLaser.h"
 #include "Setup.h"
 
+#if FREELSS_RASPBERRYPI
 namespace freelss
 {
 
@@ -113,3 +115,4 @@ bool RelayLaser::isOn(Laser::LaserSide laser)
 }
 
 }
+#endif
