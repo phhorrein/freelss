@@ -81,5 +81,5 @@ target_link_libraries(QFreeLSS
 	${MHD_LIBRARIES}
 	${LIBIW_LIBRARIES}
 	${OPENSSL_LIBRARIES})
-qt5_use_modules(QFreeLSS Core Gui)
+qt5_use_modules(QFreeLSS Core Gui SerialPort)
 #target_link_libraries(FreeLSS-NG vtkHybrid QVTK vtkViews ${QtSerialPort_LIBRARIES} ${QT_LIBRARIES})
