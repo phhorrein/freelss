@@ -19,6 +19,7 @@
 */
 
 #pragma once
+#include "Utils.h"
 #include "Image.h"
 #include "CriticalSection.h"
 

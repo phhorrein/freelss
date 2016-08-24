@@ -29,7 +29,7 @@ class Laser
 public:
 
 	/** Represents one of the available lasers */
-	enum LaserSide { LEFT_LASER, RIGHT_LASER, ALL_LASERS };
+	enum LaserSide { LEFT_LASER, RIGHT_LASER, ALL_LASERS, NUM_LASERSIDE };
 
 	/** Returns the singleton instance */
 	static Laser * getInstance();
