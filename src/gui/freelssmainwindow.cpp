@@ -7,6 +7,8 @@
 #include "freelssmainwindow.h"
 #include "ui_freelssmainwindow.h"
 
+#include <QtSerialPort/QSerialPortInfo>
+
 using namespace freelss;
 
 FreeLSSMainWindow::FreeLSSMainWindow(QWidget *parent) :
@@ -56,7 +58,7 @@ FreeLSSMainWindow::FreeLSSMainWindow(QWidget *parent) :
 	ui->stabilityDelayValue->setRange(0,500);
 	ui->stabilityDelayValue->setValue(preset.stabilityDelay);
 	connect (ui->stabilityDelayValue, SIGNAL(valueChanged(int)), 
-			this, SLOT(stabilityValueChanged(int)));
+			this, SLOT(stabilityDelayChanged(int)));
 
 	//Max Laser Width
 	ui->maxLaserWidthValue->setRange(1,255);
@@ -72,8 +74,11 @@ FreeLSSMainWindow::FreeLSSMainWindow(QWidget *parent) :
 
 
 	// Serial Port for SardauScan
-	ui->serialPortValue->addItem("/dev/ttyUSB0");
-	ui->serialPortValue->addItem("/dev/ttyACM0");
+	//Get available serial port. This should be repeated periodically...
+	const auto infos = QSerialPortInfo::availablePorts();
+	for (const QSerialPortInfo &info : infos) {
+		ui->serialPortValue->addItem(info.portName());
+	}
 	// BaudRate for SardauScan 
 	// Nothing to do
 	// Camera Selection for OpenCV Camera

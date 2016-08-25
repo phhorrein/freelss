@@ -25,6 +25,7 @@ This is also the standard OpenGL coordinate system.
 The origin is the center of the turn table.
 */
 
+#pragma once
 // LIBPNG
 #define PNG_DEBUG 3
 #include <png.h>
