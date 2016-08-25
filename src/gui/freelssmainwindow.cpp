@@ -8,12 +8,14 @@
 #include "ui_freelssmainwindow.h"
 
 #include <QtSerialPort/QSerialPortInfo>
+#include <QTimer>
 
 using namespace freelss;
 
 FreeLSSMainWindow::FreeLSSMainWindow(QWidget *parent) :
 	QMainWindow(parent),
-	ui(new Ui::FreeLSSMainWindow)
+	ui(new Ui::FreeLSSMainWindow),
+	enumerateTimer(this)
 {
 
 	LoadProperties();
@@ -75,12 +77,23 @@ FreeLSSMainWindow::FreeLSSMainWindow(QWidget *parent) :
 
 	// Serial Port for SardauScan
 	//Get available serial port. This should be repeated periodically...
-	const auto infos = QSerialPortInfo::availablePorts();
-	for (const QSerialPortInfo &info : infos) {
-		ui->serialPortValue->addItem(info.portName());
-	}
+	connect(&enumerateTimer, SIGNAL(timeout()),
+			this,SLOT(updateSerialPorts()));
+	enumerateTimer.setInterval(1000);
+	updateSerialPorts();
+	ui->serialPortValue->setCurrentText(QString::fromStdString(preset.sardauSerialPort));
+
+	connect (ui->serialPortValue, SIGNAL(currentTextChanged(const QString &)), 
+			this, SLOT(serialPortChanged(const QString &)));
 	// BaudRate for SardauScan 
-	// Nothing to do
+#if 0
+	QList<qint32>::iterator i;
+	for (i = QSerialPortInfo::standardBaudRates().begin(); i != QSerialPortInfo::standardBaudRates().end();
+			++i) {
+		ui->baudRateValue->addItem(QString::number((int)*i));
+	}
+#endif
+
 	// Camera Selection for OpenCV Camera
 	// Nothing to do
 }
@@ -127,6 +140,21 @@ void FreeLSSMainWindow::minLaserWidthChanged(int value) {
 	SaveProperties();
 }
 
+
+void FreeLSSMainWindow::updateSerialPorts() {
+	const auto infos = QSerialPortInfo::availablePorts();
+	ui->serialPortValue->clear();
+	for (const QSerialPortInfo &info : infos) {
+			ui->serialPortValue->addItem(info.systemLocation());
+	}
+	enumerateTimer.start();
+}	
+
+void FreeLSSMainWindow::serialPortChanged(const QString &text) {
+	Preset& preset = PresetManager::get()->getActivePreset();
+	preset.sardauSerialPort = text.toStdString();
+	SaveProperties();
+}
 
 
 FreeLSSMainWindow::~FreeLSSMainWindow()
