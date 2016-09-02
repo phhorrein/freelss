@@ -97,6 +97,8 @@ public:
 	 */
 	virtual void setAcquisitionDelay(double acquisitionDelaySec);
 
+	static CameraType getCameraType() {return m_cameraType;}
+
 protected:
 	Camera();
 

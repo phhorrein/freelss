@@ -9,6 +9,8 @@
 
 #include <QtSerialPort/QSerialPortInfo>
 #include <QTimer>
+#include <QPixmap>
+#include <QImage>
 
 using namespace freelss;
 
@@ -94,8 +96,19 @@ FreeLSSMainWindow::FreeLSSMainWindow(QWidget *parent) :
 	}
 #endif
 
+	if (Camera::getCameraType() == Camera::CT_OPENCV) {
 	// Camera Selection for OpenCV Camera
-	// Nothing to do
+	}
+
+	
+	////////// CamView //////////////
+	Camera *camera = Camera::getInstance();
+	if (camera == NULL) {
+		std::cout << "No Camera found!" << std::endl;
+	}
+	Image *img = camera->acquireImage();
+	QImage camImage(img->getPixels(),img->getWidth(),img->getHeight(),QImage::Format_RGB888);
+	ui->camView->setPixmap(QPixmap::fromImage(camImage));
 }
 
 void FreeLSSMainWindow::laserSelectedChange(int index) {
