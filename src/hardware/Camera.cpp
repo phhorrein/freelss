@@ -55,7 +55,6 @@ Camera::~Camera()
 Camera * Camera::getInstance()
 {
 	m_cs.enter();
-	std::cout << "in GetInstance" << std::endl;
 	try
 	{
 		if (m_instance == NULL)
@@ -75,7 +74,7 @@ Camera * Camera::getInstance()
 			else if (m_cameraType == Camera::CT_OPENCV) 
 			{
 				std::cout << "Type is OpenCV" << std::endl;
-				m_instance = new OpenCVCamera(0);
+				m_instance = new OpenCVCamera(m_reqImageWidth, m_reqImageHeight, m_reqFrameRate, 0);
 				std::cout << "Creating OpenCV video mode camera resolution=" << m_instance->getImageWidth() << "x" << m_instance->getImageHeight() << std::endl;
 			}
 			else
