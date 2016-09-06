@@ -1,6 +1,7 @@
 #ifndef FREELSSMAINWINDOW_H
 #define FREELSSMAINWINDOW_H
 
+#include "Image.h"
 #include <QMainWindow>
 #include <QTimer>
 
@@ -25,6 +26,8 @@ public slots:
 	void minLaserWidthChanged(int value);
 	void updateSerialPorts();
 	void serialPortChanged(const QString &text);
+	void connectToScanner();
+	void displayImage(freelss::Image &image);
 
 private:
     Ui::FreeLSSMainWindow *ui;

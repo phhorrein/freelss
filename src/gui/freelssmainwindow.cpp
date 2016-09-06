@@ -1,10 +1,10 @@
+#include "freelssmainwindow.h"
 #include "Utils.h"
 #include "Preset.h"
 #include "Setup.h"
 #include "SardauHardware.h"
 #include "Laser.h"
 #include "PresetManager.h"
-#include "freelssmainwindow.h"
 #include "ui_freelssmainwindow.h"
 
 #include <QtSerialPort/QSerialPortInfo>
@@ -109,8 +109,24 @@ FreeLSSMainWindow::FreeLSSMainWindow(QWidget *parent) :
 	Image *img = camera->acquireImage();
 	QImage camImage(img->getPixels(),img->getWidth(),img->getHeight(),QImage::Format_RGB888);
 	ui->camView->setPixmap(QPixmap::fromImage(camImage));
+
+	connect(camera, SIGNAL(Camera::imageAcquired(Image *)),
+			this, SLOT(displayImage(Image *)));
+
+//	connect(ui->actionConnect, SIGNAL(onClicked()),
+//			this, SLOT(connectToScanner()));
+
+	
 }
 
+void FreeLSSMainWindow::displayImage(Image &image) {
+	QImage camImage(image.getPixels(),image.getWidth(),image.getHeight(),QImage::Format_RGB888);
+	ui->camView->setPixmap(QPixmap::fromImage(camImage));
+}
+
+void FreeLSSMainWindow::connectToScanner() {
+	
+}
 void FreeLSSMainWindow::laserSelectedChange(int index) {
 	Preset& preset = PresetManager::get()->getActivePreset();
 	preset.laserSide = (Laser::LaserSide)index;

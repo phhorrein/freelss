@@ -24,6 +24,10 @@
 #include "Thread.h"
 #include "opencv2/opencv.hpp"
 
+#ifdef FREELSS_QT
+#include <QtCore>
+#endif
+
 using Clock = std::chrono::steady_clock;
 using std::chrono::time_point;
 using std::chrono::duration_cast;
@@ -89,6 +93,9 @@ Image * OpenCVCamera::acquireImage()
 //	image->assignPixels(m_matImage.data);
 	memcpy(pixels, m_matImage.data, image->getPixelBufferSize());
 
+#ifdef FREELSS_QT
+	emit imageAcquired(image);
+#endif
 	return image;
 }
 
