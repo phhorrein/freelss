@@ -38,6 +38,9 @@ Preset::Preset() :
 	stabilityDelay(0),
 	id(-1),
 	framesPerRevolution(800),
+	sardauSerialPort("/dev/ttyUSB0"),
+	sardauBaudRate(38400),
+	sardauCamId(0),
 	generateXyz (false),
 	generateStl(false),
 	generatePly(true),
@@ -71,6 +74,9 @@ void Preset::encodeProperties(std::vector<Property>& properties, bool isActivePr
 	properties.push_back(Property("presets." + name + ".plyDataFormat", ToString((int)plyDataFormat)));
 	properties.push_back(Property("presets." + name + ".enableBurstModeForStillImages", ToString(enableBurstModeForStillImages)));
 	properties.push_back(Property("presets." + name + ".createBaseForObject", ToString(createBaseForObject)));
+	properties.push_back(Property("presets." + name + ".sardauSerialPort", sardauSerialPort));
+	properties.push_back(Property("presets." + name + ".sardauBaudRate", ToString(sardauBaudRate)));
+	properties.push_back(Property("presets." + name + ".sardauCamId", ToString(sardauCamId)));
 
 	if (isActivePreset)
 	{
@@ -97,6 +103,18 @@ void Preset::decodeProperties(const std::vector<Property>& properties, const std
 		if (prop.name == prefix + name + ".laserSide")
 		{
 			laserSide = (Laser::LaserSide) ToInt(prop.value);
+		}
+		else if (prop.name == prefix + name + ".sardauSerialPort")
+		{
+			sardauSerialPort = prop.value;
+		}
+		else if (prop.name == prefix + name + ".sardauBaudRate")
+		{
+			sardauBaudRate = ToInt(prop.value);
+		}
+		else if (prop.name == prefix + name + ".sardauCamId")
+		{
+			sardauCamId = ToInt(prop.value);
 		}
 		else if (prop.name == prefix + name + ".cameraMode")
 		{

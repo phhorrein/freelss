@@ -23,12 +23,22 @@
 #include "Image.h"
 #include "CriticalSection.h"
 
+#ifdef FREELSS_QT
+#include <QtCore>
+#endif
+
 namespace freelss
 {
 
 /** Camera interface */
+#ifdef FREELSS_QT
+class Camera : public QObject
+{
+	Q_OBJECT
+#else 
 class Camera
 {
+#endif
 public:
 
 	/** The type of camera instance to create */
@@ -96,6 +106,13 @@ public:
 	 * This gives the camera time to recognize things like laser changes in the scene.
 	 */
 	virtual void setAcquisitionDelay(double acquisitionDelaySec);
+
+	static CameraType getCameraType() {return m_cameraType;}
+
+#ifdef FREELSS_QT
+signals:
+	void imageAcquired(Image *);
+#endif
 
 protected:
 	Camera();

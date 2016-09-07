@@ -1,19 +1,23 @@
+#include "freelssmainwindow.h"
 #include "Utils.h"
 #include "Preset.h"
 #include "Setup.h"
 #include "SardauHardware.h"
 #include "Laser.h"
 #include "PresetManager.h"
-#include "freelssmainwindow.h"
 #include "ui_freelssmainwindow.h"
 
 #include <QtSerialPort/QSerialPortInfo>
+#include <QTimer>
+#include <QPixmap>
+#include <QImage>
 
 using namespace freelss;
 
 FreeLSSMainWindow::FreeLSSMainWindow(QWidget *parent) :
 	QMainWindow(parent),
-	ui(new Ui::FreeLSSMainWindow)
+	ui(new Ui::FreeLSSMainWindow),
+	enumerateTimer(this)
 {
 
 	LoadProperties();
@@ -75,16 +79,54 @@ FreeLSSMainWindow::FreeLSSMainWindow(QWidget *parent) :
 
 	// Serial Port for SardauScan
 	//Get available serial port. This should be repeated periodically...
-	const auto infos = QSerialPortInfo::availablePorts();
-	for (const QSerialPortInfo &info : infos) {
-		ui->serialPortValue->addItem(info.portName());
-	}
+	connect(&enumerateTimer, SIGNAL(timeout()),
+			this,SLOT(updateSerialPorts()));
+	enumerateTimer.setInterval(1000);
+	updateSerialPorts();
+	ui->serialPortValue->setCurrentText(QString::fromStdString(preset.sardauSerialPort));
+
+	connect (ui->serialPortValue, SIGNAL(currentTextChanged(const QString &)), 
+			this, SLOT(serialPortChanged(const QString &)));
 	// BaudRate for SardauScan 
-	// Nothing to do
+#if 0
+	QList<qint32>::iterator i;
+	for (i = QSerialPortInfo::standardBaudRates().begin(); i != QSerialPortInfo::standardBaudRates().end();
+			++i) {
+		ui->baudRateValue->addItem(QString::number((int)*i));
+	}
+#endif
+
+	if (Camera::getCameraType() == Camera::CT_OPENCV) {
 	// Camera Selection for OpenCV Camera
-	// Nothing to do
+	}
+
+	
+	////////// CamView //////////////
+	Camera *camera = Camera::getInstance();
+	if (camera == NULL) {
+		std::cout << "No Camera found!" << std::endl;
+	}
+	Image *img = camera->acquireImage();
+	QImage camImage(img->getPixels(),img->getWidth(),img->getHeight(),QImage::Format_RGB888);
+	ui->camView->setPixmap(QPixmap::fromImage(camImage));
+
+	connect(camera, SIGNAL(Camera::imageAcquired(Image *)),
+			this, SLOT(displayImage(Image *)));
+
+//	connect(ui->actionConnect, SIGNAL(onClicked()),
+//			this, SLOT(connectToScanner()));
+
+	
 }
 
+void FreeLSSMainWindow::displayImage(Image &image) {
+	QImage camImage(image.getPixels(),image.getWidth(),image.getHeight(),QImage::Format_RGB888);
+	ui->camView->setPixmap(QPixmap::fromImage(camImage));
+}
+
+void FreeLSSMainWindow::connectToScanner() {
+	
+}
 void FreeLSSMainWindow::laserSelectedChange(int index) {
 	Preset& preset = PresetManager::get()->getActivePreset();
 	preset.laserSide = (Laser::LaserSide)index;
@@ -127,6 +169,21 @@ void FreeLSSMainWindow::minLaserWidthChanged(int value) {
 	SaveProperties();
 }
 
+
+void FreeLSSMainWindow::updateSerialPorts() {
+	const auto infos = QSerialPortInfo::availablePorts();
+	ui->serialPortValue->clear();
+	for (const QSerialPortInfo &info : infos) {
+			ui->serialPortValue->addItem(info.systemLocation());
+	}
+	enumerateTimer.start();
+}	
+
+void FreeLSSMainWindow::serialPortChanged(const QString &text) {
+	Preset& preset = PresetManager::get()->getActivePreset();
+	preset.sardauSerialPort = text.toStdString();
+	SaveProperties();
+}
 
 
 FreeLSSMainWindow::~FreeLSSMainWindow()

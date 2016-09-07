@@ -33,7 +33,7 @@ namespace freelss
 class OpenCVCamera : public Camera
 {
 public:
-	OpenCVCamera(int devid);
+	OpenCVCamera(int w, int h, int f, int devid = 0);
 //	OpenCVCamera(int imageWidth, int imageHeight, int frameRate);
 	~OpenCVCamera();
 

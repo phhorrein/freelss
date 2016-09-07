@@ -310,7 +310,7 @@
    </attribute>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
-  <action name="actionConnect_to_scanner">
+  <action name="actionConnect">
    <property name="text">
     <string>Connect to scanner</string>
    </property>

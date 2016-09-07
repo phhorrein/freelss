@@ -24,6 +24,10 @@
 #include "Thread.h"
 #include "opencv2/opencv.hpp"
 
+#ifdef FREELSS_QT
+#include <QtCore>
+#endif
+
 using Clock = std::chrono::steady_clock;
 using std::chrono::time_point;
 using std::chrono::duration_cast;
@@ -33,7 +37,7 @@ using namespace cv;
 namespace freelss
 {
 
-OpenCVCamera::OpenCVCamera(int devid) :
+OpenCVCamera::OpenCVCamera(int w, int h, int f, int devid) :
 	m_devid(devid),
 	m_camera(devid)
 {
@@ -41,8 +45,9 @@ OpenCVCamera::OpenCVCamera(int devid) :
 		if (!m_camera.isOpened()) {
 			throw Exception ("Failed to open OpenCV Camera");
 		}
-		m_camera.set(CV_CAP_PROP_FRAME_HEIGHT,720);
-		m_camera.set(CV_CAP_PROP_FRAME_WIDTH,1280);
+		m_camera.set(CV_CAP_PROP_FRAME_HEIGHT, h);
+		m_camera.set(CV_CAP_PROP_FRAME_WIDTH, w);
+		m_camera.set(CV_CAP_PROP_FPS, f);
 		m_imageHeight = m_camera.get(CV_CAP_PROP_FRAME_HEIGHT);
 		m_imageWidth = m_camera.get(CV_CAP_PROP_FRAME_WIDTH);
 		m_frameRate = m_camera.get(CV_CAP_PROP_FPS);
@@ -57,12 +62,13 @@ OpenCVCamera::OpenCVCamera(int devid) :
 		//m_camera.set(CV_CAP_PROP_CONVERT_RGB, true);
 #endif
 
-		std::cout << "Target Image Width: " << m_imageWidth << std::endl;
-		std::cout << "Target Image Height: " << m_imageHeight << std::endl;
+		std::cout << "Target Image Width: " << w << ", actual is " << m_imageWidth << std::endl;
+		std::cout << "Target Image Height: "<< h << ", actual is " << m_imageHeight << std::endl;
 
 		std::cout << "Initialized camera" << std::endl;
 	}
-	catch (...) {
+	catch (const std::exception &ex) {
+		std::cerr << ex.what() << std::endl;
 		throw;
 	}
 }
@@ -92,6 +98,9 @@ Image * OpenCVCamera::acquireImage()
 //	image->assignPixels(m_matImage.data);
 	memcpy(pixels, m_matImage.data, image->getPixelBufferSize());
 
+#ifdef FREELSS_QT
+	emit imageAcquired(image);
+#endif
 	return image;
 }
 

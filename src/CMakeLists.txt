@@ -72,6 +72,7 @@ target_link_libraries(FreeLSS-webapp
 qt5_wrap_ui(UISrcs ${UI_FILES} )
 add_executable(QFreeLSS
 	${CXX_CORE_FILES} ${CXX_GUI_FILES} ${UISrcs})
+target_compile_definitions(QFreeLSS PUBLIC FREELSS_QT)
 target_link_libraries(QFreeLSS
 	${VTK_LIBRARIES}
 	${CMAKE_THREAD_LIBS_INIT}

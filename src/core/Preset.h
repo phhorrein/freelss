@@ -71,6 +71,10 @@ public:
 	real groundPlaneHeight;
 	LaserMergeAction laserMergeAction;
 	PlyDataFormat plyDataFormat;
+
+	std::string sardauSerialPort;
+	int sardauBaudRate;
+	int sardauCamId;
 };
 
 }

@@ -59,6 +59,7 @@ Camera * Camera::getInstance()
 	{
 		if (m_instance == NULL)
 		{
+			std::cout << "Initializing instance" << std::endl;
 			if (m_cameraType == Camera::CT_MMALSTILL)
 			{
 				Preset& preset = PresetManager::get()->getActivePreset();
@@ -72,7 +73,8 @@ Camera * Camera::getInstance()
 			}
 			else if (m_cameraType == Camera::CT_OPENCV) 
 			{
-				m_instance = new OpenCVCamera(0);
+				std::cout << "Type is OpenCV" << std::endl;
+				m_instance = new OpenCVCamera(m_reqImageWidth, m_reqImageHeight, m_reqFrameRate, 0);
 				std::cout << "Creating OpenCV video mode camera resolution=" << m_instance->getImageWidth() << "x" << m_instance->getImageHeight() << std::endl;
 			}
 			else
