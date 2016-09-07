@@ -41,10 +41,21 @@ OpenCVCamera::OpenCVCamera(int devid) :
 		if (!m_camera.isOpened()) {
 			throw Exception ("Failed to open OpenCV Camera");
 		}
+		m_camera.set(CV_CAP_PROP_FRAME_HEIGHT,720);
+		m_camera.set(CV_CAP_PROP_FRAME_WIDTH,1280);
 		m_imageHeight = m_camera.get(CV_CAP_PROP_FRAME_HEIGHT);
 		m_imageWidth = m_camera.get(CV_CAP_PROP_FRAME_WIDTH);
 		m_frameRate = m_camera.get(CV_CAP_PROP_FPS);
-//m_camera.set(CV_CAP_PROP_CONVERT_RGB, true);
+
+#if 0
+		m_camera.set(CV_CAP_PROP_BRIGHTNESS,0.5);
+		m_camera.set(CV_CAP_PROP_CONTRAST,0);
+		m_camera.set(CV_CAP_PROP_SATURATION,0.9);
+		std::cout << "Brightness: " << m_camera.get(CV_CAP_PROP_BRIGHTNESS) << " ";
+		std::cout << "Contrast: " << m_camera.get(CV_CAP_PROP_CONTRAST) << " ";
+		std::cout << "Saturation: " << m_camera.get(CV_CAP_PROP_SATURATION) << std::endl;
+		//m_camera.set(CV_CAP_PROP_CONVERT_RGB, true);
+#endif
 
 		std::cout << "Target Image Width: " << m_imageWidth << std::endl;
 		std::cout << "Target Image Height: " << m_imageHeight << std::endl;
